@@ -1,6 +1,10 @@
 
 🐄 NVDA Cow Jump
-https://github.com/user-attachments/assets/5cfd37e4-0403-40ea-a09f-894c923078e2
+
+
+https://github.com/user-attachments/assets/d8e42374-dfb5-4c20-96f0-b4403774758a
+
+
 The world's first "Stock Market-Linked Cow Physics" game.
 
 💡 Concept: The Semiconductor Meta-Causality
