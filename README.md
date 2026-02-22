@@ -1,5 +1,6 @@
 
 🐄 NVDA Cow Jump
+https://github.com/user-attachments/assets/5cfd37e4-0403-40ea-a09f-894c923078e2
 The world's first "Stock Market-Linked Cow Physics" game.
 
 💡 Concept: The Semiconductor Meta-Causality
@@ -7,7 +8,7 @@ The world's first "Stock Market-Linked Cow Physics" game.
 
 Because in the modern semiconductor ecosystem, there is a brutal truth: "If ASML trips, NVIDIA cannot jump." In this game, the cow's jumping power (propulsion) is entirely dependent on N
 
-https://github.com/user-attachments/assets/5cfd37e4-0403-40ea-a09f-894c923078e2
+
 
 VIDIA's stock price fluctuations. However, the technical foundation supporting its feet is concentrated in the ASML "chip" (QR code) on its back. This represents the delicate balance of the global supply chain.
 
