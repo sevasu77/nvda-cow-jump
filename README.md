@@ -5,7 +5,11 @@ The world's first "Stock Market-Linked Cow Physics" game.
 💡 Concept: The Semiconductor Meta-Causality
 "Why is a cow powered by NVIDIA (NVDA) carrying an ASML financial report on its back?"
 
-Because in the modern semiconductor ecosystem, there is a brutal truth: "If ASML trips, NVIDIA cannot jump." In this game, the cow's jumping power (propulsion) is entirely dependent on NVIDIA's stock price fluctuations. However, the technical foundation supporting its feet is concentrated in the ASML "chip" (QR code) on its back. This represents the delicate balance of the global supply chain.
+Because in the modern semiconductor ecosystem, there is a brutal truth: "If ASML trips, NVIDIA cannot jump." In this game, the cow's jumping power (propulsion) is entirely dependent on N
+
+https://github.com/user-attachments/assets/5cfd37e4-0403-40ea-a09f-894c923078e2
+
+VIDIA's stock price fluctuations. However, the technical foundation supporting its feet is concentrated in the ASML "chip" (QR code) on its back. This represents the delicate balance of the global supply chain.
 
 🕹️ Game Mechanics
 Real-time Gravity: When NVIDIA's stock rises, gravity decreases. When it crashes, the cow is slammed to the ground by the weight of market despair.
