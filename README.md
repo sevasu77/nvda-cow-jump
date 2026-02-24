@@ -1,5 +1,17 @@
 
-🐄 NVDA Cow Jump
+# 🐂 NVDA Cow Jump (Project: Market Dynamics Lab)
+
+> **"What if the stock market became a physical law of nature?"**
+
+## 💡 Concept
+This project is an **experimental data visualization and educational simulation**. 
+It explores how abstract financial data (market volatility) can be translated into physical forces (gravity and jump mechanics) within a virtual environment.
+
+### 🛡️ Disclaimer (Important)
+- **Not Financial Advice:** All data and information presented are for educational and entertainment purposes only.
+- **Educational Experiment:** This is an independent art piece exploring data sonification and physics. It is not affiliated with, endorsed by, or representing NVIDIA, ASML, or any other real-world entity.
+- **Data Accuracy:** Market data is provided via `yfinance`. It is not real-time and may be delayed.
+- **Risk:** The developer is not responsible for any financial losses or decisions made based on this experimental software.
 
 
 https://github.com/user-attachments/assets/d8e42374-dfb5-4c20-96f0-b4403774758a
@@ -84,3 +96,6 @@ streamlit run app.py
 
 ⚠️ Warning
 株価暴落時にこのゲームをプレイすることは、精神衛生上おすすめしません。牛が重くて跳ねない時、それは現実の市場があなたに「ロスカット」を促しているサインかもしれません。
+
+📜 License
+This project is licensed under the MIT License - see the LICENSE file for details.
