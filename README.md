@@ -123,3 +123,10 @@ Special Thanks to ASML:
 
 📜 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+- **2026-02-26 (v2.1.0)**:
+  - **Logic Encapsulation**: Migrated core physics engine to an abstract calculation layer.
+  - **Dynamic UI Refactoring**: Implemented adaptive node rendering system (Reduced DOM overhead).
+  - **Stealth Mode**: Disabled Streamlit sidebar and native controls for immersive experience.
+  - **Market Sync**: Optimized real-time NVDA stock parameter mapping.
