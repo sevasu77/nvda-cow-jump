@@ -124,6 +124,7 @@ Special Thanks to ASML:
 📜 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## 🛠 Update History
 
 - **2026-02-26 (v2.1.0)**:
   - **Logic Encapsulation**: Migrated core physics engine to an abstract calculation layer.
