@@ -1,6 +1,9 @@
 
 # 🐄 Hyper Cow Jump – Physics Hunger Survival Game
 
+![2026-02-2217-26-42-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/aaf7a44e-88a9-4b69-8512-5d7612a78d01)
+
+
 > **"What if the stock market became a physical law of nature?"**
 
 ## 💡 Concept
@@ -12,9 +15,6 @@ It explores how abstract financial data (market volatility) can be translated in
 - **Educational Experiment:** This is an independent art piece exploring data sonification and physics. It is not affiliated with, endorsed by, or representing NVIDIA, ASML, or any other real-world entity.
 - **Data Accuracy:** Market data is provided via `yfinance`. It is not real-time and may be delayed.
 - **Risk:** The developer is not responsible for any financial losses or decisions made based on this experimental software.
-
-
-https://github.com/user-attachments/assets/d8e42374-dfb5-4c20-96f0-b4403774758a
 
 
 The world's first "Stock Market-Linked Cow Physics" game.
