@@ -1,5 +1,5 @@
 
-# 🐂 NVDA Cow Jump (Project: Market Dynamics Lab)
+# 🐄 Hyper Cow Jump – Physics Hunger Survival Game
 
 > **"What if the stock market became a physical law of nature?"**
 
