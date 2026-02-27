@@ -1,100 +1,210 @@
 import streamlit as st
-import yfinance as yf
 
-# --- 1. UIの完全固定化 ---
-st.set_page_config(page_title="NVDA Cow Jump", layout="centered", initial_sidebar_state="collapsed")
-
-st.markdown("""
-    <style>
-    [data-testid="stSidebar"], [data-testid="collapsedControl"], header, footer { display: none !important; }
-    .main .block-container { padding-top: 2rem !important; }
-    </style>
-    """, unsafe_allow_html=True)
-
-# --- 2.  ---
-@st.cache_data(ttl=3600)
-def get_nvda_coeff():
-    try:
-        nvda = yf.Ticker("NVDA")
-        change = ((nvda.history(period="2d")['Close'].pct_change()) * 100).iloc[-1]
-        # 物理定数
-        return {"k": round(0.4 * (1 - (change / 15)), 4), "p": round(-12 * (1 + (change / 40)), 4), "raw": round(change, 2)}
-    except:
-        return {"k": 0.38, "p": -11.5, "raw": 1.02}
-
-m_data = get_nvda_coeff()
-
-# --- 3. ゲームエンジン ---
-game_code = f"""
+# Hyper Cow Jump - Official Demo Version
+# This code is a functional prototype for the full version available on itch.io.
+hyper_cow_jump_official = """
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Hyper Cow Jump - Official Demo</title>
     <style>
-        body {{ margin: 0; background: #000428; color: white; font-family: monospace; overflow: hidden; }}
-        #stage {{ position: relative; width: 400px; height: 600px; background: #000428; margin: auto; border: 4px solid #fff; overflow: hidden; }}
-        #unit {{ position: absolute; width: 50px; height: 50px; font-size: 40px; z-index: 10; }}
-        
-        .p-node {{ position: absolute; height: 10px; background: #00ffcc; border-radius: 5px; width: 100px; }}
-        #ui {{ position: absolute; top: 10px; left: 10px; font-size: 11px; z-index: 100; background: rgba(0,0,0,0.8); padding: 5px; }}
+        body { 
+            margin: 0; background: #000428; color: white; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; overflow: hidden;
+        }
+        #game-container {
+            position: relative; width: 400px; height: 600px;
+            background: linear-gradient(to top, #004e92, #000428);
+            border: 4px solid #fff; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        #cow {
+            position: absolute; font-size: 50px; z-index: 10;
+            transform-origin: center bottom;
+        }
+        .platform {
+            position: absolute; height: 15px; background: #00ffcc;
+            border-radius: 5px; box-shadow: 0 0 10px #00ffcc;
+            transform-origin: center;
+        }
+        .burger { position: absolute; font-size: 30px; }
+        #ui {
+            position: absolute; top: 10px; left: 10px; z-index: 100;
+            font-size: 16px; width: 90%; letter-spacing: 1px;
+        }
+        #hunger-bar-container {
+            width: 100%; height: 8px; background: #333; border-radius: 4px; margin-top: 5px;
+        }
+        #hunger-bar { width: 100%; height: 100%; background: #ff4b2b; border-radius: 4px; }
+        #altitude { color: gold; font-weight: bold; }
+        #game-over {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000;
+            text-align: center; padding: 20px;
+        }
+        button { 
+            padding: 12px 24px; font-size: 18px; cursor: pointer; background: gold; 
+            border: none; border-radius: 5px; margin-top: 15px; font-weight: bold;
+        }
+        .itch-link { 
+            color: #ff4b2b; font-weight: bold; text-decoration: none; 
+            margin-top: 20px; font-size: 14px; border: 1px solid #ff4b2b;
+            padding: 8px 16px; border-radius: 20px; transition: 0.3s;
+        }
+        .itch-link:hover { background: #ff4b2b; color: white; }
     </style>
 </head>
 <body>
-<div id="stage">
-    <div id="ui">MARKET_REF: {m_data['raw']}%<br>ALT: <span id="a">0</span></div>
-    <div id="unit">🐄</div>
-    <div id="n0" class="p-node"></div><div id="n1" class="p-node"></div>
-    <div id="n2" class="p-node"></div><div id="n3" class="p-node"></div>
-    <div id="n4" class="p-node"></div><div id="n5" class="p-node"></div>
+
+<div id="game-container">
+    <div id="ui">
+        ALTITUDE: <span id="altitude">0</span> m<br>
+        ENERGY:
+        <div id="hunger-bar-container"><div id="hunger-bar"></div></div>
+    </div>
+
+    <div id="cow">🐄</div>
+
+    <div id="game-over">
+        <h2 id="fail-reason">Game Over</h2>
+        <p>Record: <span id="final-alt">0</span>m</p>
+        <p id="promo-msg" style="display:none; color: #00ffcc; font-size: 14px;">
+            Thank you for playing the Demo!<br>
+            The full version with enhanced graphics and sound is available on itch.io.
+        </p>
+        <button onclick="location.reload()">Try Again</button>
+        <a href="https://sevasu77.itch.io/" target="_blank" class="itch-link">Play Full Version on itch.io</a>
+    </div>
 </div>
 
 <script>
-    const _K = {m_data['k']}, _P = {m_data['p']};
-    let _y = 300, _vy = 0, _x = 175, _alt = 0;
-    let _s = [550, 440, 330, 220, 110, 0]; // 垂直オフセット
-    let _lx = [100, 200, 50, 250, 150, 80]; // 水平固定値
-    let _keys = {{}};
+    const container = document.getElementById('game-container');
+    const cowEl = document.getElementById('cow');
+    const hungerBar = document.getElementById('hunger-bar');
+    const altDisp = document.getElementById('altitude');
 
-    // if(y > p.y...) 
-    function _check(_cy, _cx) {{
-        let hit = false;
-        _s.forEach((v, i) => {{
-            const dx = _cx - _lx[i];
-            
-            if (_vy > 0 && Math.abs(_cy + 45 - v) < 8 && dx > -30 && dx < 80) hit = true;
-        }});
-        return hit;
-    }}
+    let cow = { x: 180, y: 300, vx: 0, vy: 0, w: 50, h: 50 };
+    let platforms = [];
+    let altitude = 0;
+    let hunger = 100;
+    let keys = {};
+    let gameActive = true;
 
-    function _proc() {{
-        _vy += _K; _y += _vy;
-        if(_keys['ArrowLeft']) _x -= 6; if(_keys['ArrowRight']) _x += 6;
-        
-        if(_check(_y, _x)) _vy = _P;
+    function init() {
+        for(let i=0; i<6; i++) {
+            spawnPlatform(500 - (i * 120));
+        }
+        requestAnimationFrame(loop);
+    }
 
-        if(_y < 250) {{
-            let d = 250 - _y; _y = 250; _alt += d/10;
-            _s = _s.map(v => (v + d > 600) ? 0 : v + d);
-        }}
+    function spawnPlatform(y) {
+        platforms.push({
+            x: Math.random() * 250 + 20,
+            y: y,
+            w: 100,
+            angle: 0,
+            targetY: y,
+            offset: Math.random() * 100,
+            isBurger: Math.random() > 0.8
+        });
+    }
 
-        const u = document.getElementById('unit');
-        u.style.top = _y + 'px'; u.style.left = _x + 'px';
-        _s.forEach((v, i) => {{
-            const n = document.getElementById('n' + i);
-            n.style.top = v + 'px'; n.style.left = _lx[i] + 'px';
-        }});
-        document.getElementById('a').innerText = Math.floor(_alt);
-        
-        if(_y > 600) location.reload();
-        requestAnimationFrame(_proc);
-    }}
+    function loop() {
+        if(!gameActive) return;
 
-    window.onkeydown = e => _keys[e.key] = true;
-    window.onkeyup = e => _keys[e.key] = false;
-    _proc();
+        // Demo Limitation: Altitude limit
+        if (altitude > 1000) { 
+            endGame("Demo Limit Reached", true); 
+            return;
+        }
+
+        cow.vy += 0.4;
+        if(keys['a'] || keys['arrowleft']) cow.vx -= 0.8;
+        if(keys['d'] || keys['arrowright']) cow.vx += 0.8;
+        cow.vx *= 0.9;
+        cow.x += cow.vx;
+        cow.y += cow.vy;
+
+        hunger -= 0.05 + (altitude / 10000);
+        hungerBar.style.width = Math.max(0, hunger) + '%';
+        if(hunger <= 0) endGame("Energy Depleted");
+
+        platforms.forEach(p => {
+            p.y = p.targetY + Math.sin((Date.now() + p.offset) / 500) * 30;
+            if(cow.vy > 0 && 
+               cow.x + cow.w > p.x && cow.x < p.x + p.w &&
+               cow.y + cow.h > p.y && cow.y + cow.h < p.y + 20) {
+                let center = p.x + p.w / 2;
+                p.angle = ((cow.x + cow.w/2) - center) * 0.4;
+                if(cow.y + cow.h <= p.y + 10 + Math.abs(p.angle/2)) {
+                    cow.y = p.y - cow.h + Math.abs(p.angle/2);
+                    cow.vy = -12;
+                    if(p.isBurger) { hunger = Math.min(100, hunger + 30); p.isBurger = false; }
+                }
+            }
+        });
+
+        if(cow.y < 300) {
+            let diff = 300 - cow.y;
+            cow.y = 300;
+            altitude += Math.floor(diff);
+            altDisp.innerText = Math.floor(altitude/10);
+            platforms.forEach(p => {
+                p.targetY += diff;
+                if(p.targetY > 600) {
+                    platforms.splice(platforms.indexOf(p), 1);
+                    spawnPlatform(-50);
+                }
+            });
+        }
+
+        cowEl.style.left = cow.x + 'px';
+        cowEl.style.top = cow.y + 'px';
+        cowEl.style.transform = `rotate(${cow.vx * 2}deg)`;
+
+        renderPlatforms();
+
+        if(cow.y > 600) endGame("Fell Off");
+        requestAnimationFrame(loop);
+    }
+
+    function renderPlatforms() {
+        const platformEls = container.querySelectorAll('.platform, .burger');
+        platformEls.forEach(el => el.remove());
+        platforms.forEach(p => {
+            const el = document.createElement('div');
+            el.className = 'platform';
+            el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
+            el.style.width = p.w + 'px'; el.style.transform = `rotate(${p.angle}deg)`;
+            container.appendChild(el);
+            if(p.isBurger) {
+                const b = document.createElement('div');
+                b.className = 'burger'; b.innerText = '🍔';
+                b.style.left = (p.x + 30) + 'px'; b.style.top = (p.y - 40) + 'px';
+                container.appendChild(b);
+            }
+        });
+    }
+
+    function endGame(reason, isPromo = false) {
+        gameActive = false;
+        document.getElementById('game-over').style.display = 'flex';
+        document.getElementById('fail-reason').innerText = reason;
+        document.getElementById('final-alt').innerText = Math.floor(altitude/10);
+        if(isPromo) {
+            document.getElementById('promo-msg').style.display = 'block';
+        }
+    }
+
+    window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+    window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+    init();
 </script>
 </body>
 </html>
 """
 
-st.components.v1.html(game_code, height=650)
+st.components.v1.html(hyper_cow_jump_official, height=650)
