@@ -131,3 +131,16 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   - **Dynamic UI Refactoring**: Implemented adaptive node rendering system (Reduced DOM overhead).
   - **Stealth Mode**: Disabled Streamlit sidebar and native controls for immersive experience.
   - **Market Sync**: Optimized real-time NVDA stock parameter mapping.
+
+🛠 Update History
+2026-02-27 (v2.2.0):
+
+Transition to Official Demo: Reconfigured the application as a functional prototype for public preview.
+
+Milestone Limitation: Implemented an altitude-based session termination (100m limit) to define demo scope.
+
+UX/UI Localization: Globalized interface text (English) and optimized UI for cross-platform compatibility.
+
+Integrated Redirect System: Embedded secure navigational links to the official Full Version hosted on itch.io.
+
+Asset Protection: Decoupled production-grade assets from the public source layer to ensure intellectual property integrity.
